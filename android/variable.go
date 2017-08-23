@@ -20,6 +20,8 @@ import (
 	"runtime"
 	"strings"
 
+	"carbon/soong/android"
+
 	"github.com/google/blueprint/proptools"
 )
 
@@ -97,6 +99,9 @@ type variableProperties struct {
 			Cflags   []string
 			Cppflags []string
 		}
+
+		// include Carbon variables
+		*android.Product_variables
 	} `android:"arch_variant"`
 }
 
@@ -166,6 +171,9 @@ type productVariables struct {
 	BtConfigIncludeDir *string `json:",omitempty"`
 
 	Override_rs_driver *string `json:",omitempty"`
+
+	// include Carbon variables
+	*android.ProductVariables
 }
 
 func boolPtr(v bool) *bool {
