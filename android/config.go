@@ -1278,3 +1278,15 @@ func (c *deviceConfig) DeviceSecondaryArchVariant() string {
 func (c *deviceConfig) BoardUsesRecoveryAsBoot() bool {
 	return Bool(c.config.productVariables.BoardUsesRecoveryAsBoot)
 }
+
+func (c *deviceConfig) QTIAudioPath() string {
+	return String(c.config.productVariables.QTIAudioPath)
+}
+
+func (c *deviceConfig) QTIDisplayPath() string {
+	return String(c.config.productVariables.QTIDisplayPath)
+}
+
+func (c *deviceConfig) QTIMediaPath() string {
+	return String(c.config.productVariables.QTIMediaPath)
+}
