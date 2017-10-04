@@ -227,6 +227,10 @@ func ThreadSanitizerRuntimeLibrary(t Toolchain) string {
 	return SanitizerRuntimeLibrary(t, "tsan")
 }
 
+func ProfileRuntimeLibrary(t Toolchain) string {
+	return SanitizerRuntimeLibrary(t, "profile")
+}
+
 func ToolPath(t Toolchain) string {
 	if p := t.ToolPath(); p != "" {
 		return p
