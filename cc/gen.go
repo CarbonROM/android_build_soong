@@ -26,7 +26,12 @@ import (
 
 func init() {
 	pctx.SourcePathVariable("lexCmd", "prebuilts/misc/${config.HostPrebuiltTag}/flex/flex-2.5.39")
-	pctx.SourcePathVariable("yaccCmd", "prebuilts/misc/${config.HostPrebuiltTag}/bison/bison")
+	if (config.(android.Config).Getenv("USE_HOST_BISON") == "yes") {
+		pctx.SourcePathVariable("yaccCmd", "${config.HostPrebuiltTag}/bison")
+	} else {
+		pctx.SourcePathVariable("yaccCmd", "prebuilts/misc/${config.HostPrebuiltTag}/bison/bison")
+	}
+
 	pctx.SourcePathVariable("yaccDataDir", "external/bison/data")
 
 	pctx.HostBinToolVariable("aidlCmd", "aidl-cpp")
