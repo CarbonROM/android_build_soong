@@ -572,3 +572,7 @@ func (c *deviceConfig) QTIDisplayPath() string {
 func (c *deviceConfig) QTIMediaPath() string {
 	return String(c.config.ProductVariables.Carbon.QTIMediaPath)
 }
+
+func (c *deviceConfig) TargetUsesProprietaryLibs() string {
+	return String(c.config.ProductVariables.Carbon.TargetUsesProprietaryLibs)
+}
