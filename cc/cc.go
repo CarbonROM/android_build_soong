@@ -169,6 +169,9 @@ type BaseProperties struct {
 	PreventInstall      bool     `blueprint:"mutated"`
 
 	UseVndk bool `blueprint:"mutated"`
+
+        // select the appropriate blas library for modules that need it
+        Needs_blas *bool `android:"arch_variant,variant_prepend"`
 }
 
 type UnusedProperties struct {
@@ -189,6 +192,7 @@ type ModuleContextIntf interface {
 	createVndkSourceAbiDump() bool
 	selectedStl() string
 	baseModuleName() string
+	needsBlas() bool
 }
 
 type ModuleContext interface {
@@ -421,6 +425,10 @@ func (ctx *moduleContextImpl) staticBinary() bool {
 
 func (ctx *moduleContextImpl) noDefaultCompilerFlags() bool {
 	return Bool(ctx.mod.Properties.No_default_compiler_flags)
+}
+
+func (ctx *moduleContextImpl) needsBlas() bool {
+	return Bool(ctx.mod.Properties.Needs_blas)
 }
 
 func (ctx *moduleContextImpl) sdk() bool {

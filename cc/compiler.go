@@ -239,6 +239,15 @@ func (compiler *baseCompiler) compilerFlags(ctx ModuleContext, flags Flags) Flag
 		}
 	}
 
+	if ctx.needsBlas() {
+		if (ctx.DeviceConfig().TargetUsesQSML() && (ctx.Arch().ArchType.Multilib == "lib64")) {
+			flags.CppFlags = append(flags.CppFlags, "-DUSE_QSML_SYMPHONY")
+		} else if ctx.DeviceConfig().TargetUsesQSML() {
+			flags.CppFlags = append(flags.CppFlags, "-DUSE_QSML_OMP")
+			flags.CppFlags = append(flags.CppFlags, "-fopenmp")
+		}
+	}
+
 	if ctx.sdk() {
 		// The NDK headers are installed to a common sysroot. While a more
 		// typical Soong approach would be to only make the headers for the
