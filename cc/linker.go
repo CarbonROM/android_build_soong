@@ -94,6 +94,9 @@ type BaseLinkerProperties struct {
 	// static libraries that are only used when a board flag is enabled.
 	Proprietary_whole_static_libs []string `android:"arch_variant,variant_prepend"`
 
+        // select the appropriate blas library for modules that need it
+        Needs_blas *bool `android:"arch_variant,variant_prepend"`
+
 	Target struct {
 		Vendor struct {
 			// list of shared libs that should not be used to build
@@ -140,6 +143,7 @@ func (linker *baseLinker) linkerDeps(ctx BaseModuleContext, deps Deps) Deps {
 	if (!ctx.DeviceConfig().TargetUsesProprietaryLibs()) {
 		linker.Properties.Proprietary_whole_static_libs = nil
         }
+
 	deps.WholeStaticLibs = append(deps.WholeStaticLibs, linker.Properties.Whole_static_libs...)
 	deps.WholeStaticLibs = append(deps.WholeStaticLibs, linker.Properties.Qti_whole_static_libs...)
 	deps.WholeStaticLibs = append(deps.WholeStaticLibs, linker.Properties.Proprietary_whole_static_libs...)
@@ -151,6 +155,19 @@ func (linker *baseLinker) linkerDeps(ctx BaseModuleContext, deps Deps) Deps {
 	deps.ReexportStaticLibHeaders = append(deps.ReexportStaticLibHeaders, linker.Properties.Export_static_lib_headers...)
 	deps.ReexportSharedLibHeaders = append(deps.ReexportSharedLibHeaders, linker.Properties.Export_shared_lib_headers...)
 	deps.ReexportGeneratedHeaders = append(deps.ReexportGeneratedHeaders, linker.Properties.Export_generated_headers...)
+
+	// select a blas lib if needed
+        if (ctx.needsBlas()) {
+		if (ctx.DeviceConfig().TargetUsesQSML() && (ctx.Arch().ArchType.Multilib == "lib64")) {
+			deps.SharedLibs = append(deps.SharedLibs, "libQSML-symphony-0.15.5")
+			deps.HeaderLibs = append(deps.HeaderLibs, "libQSML_headers")
+		} else if ctx.DeviceConfig().TargetUsesQSML() {
+			deps.SharedLibs = append(deps.SharedLibs, "libQSML-0.15.5")
+			deps.HeaderLibs = append(deps.HeaderLibs, "libQSML_headers")
+		} else {
+			deps.SharedLibs = append(deps.SharedLibs, "libblas")
+		}
+	}
 
 	if ctx.vndk() {
 		deps.SharedLibs = removeListFromList(deps.SharedLibs, linker.Properties.Target.Vendor.Exclude_shared_libs)

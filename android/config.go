@@ -576,3 +576,7 @@ func (c *deviceConfig) QTIMediaPath() string {
 func (c *deviceConfig) TargetUsesProprietaryLibs() bool {
 	return Bool(c.config.ProductVariables.TargetUsesProprietaryLibs)
 }
+
+func (c *deviceConfig) TargetUsesQSML() bool {
+	return Bool(c.config.ProductVariables.Carbon.Target_uses_qsml)
+}
