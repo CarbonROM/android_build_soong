@@ -102,12 +102,6 @@ func createIncludeDirsRules() []Rule {
 func createTrebleRules() []Rule {
 	return []Rule{
 		NeverAllow().
-			In("vendor", "device").
-			With("vndk.enabled", "true").
-			Without("vendor", "true").
-			Without("product_specific", "true").
-			Because("the VNDK can never contain a library that is device dependent."),
-		NeverAllow().
 			With("vndk.enabled", "true").
 			Without("vendor", "true").
 			Without("owner", "").
