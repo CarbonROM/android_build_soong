@@ -87,22 +87,6 @@ var neverallowTests = []struct {
 	},
 	// Treble rule tests
 	{
-		name: "no vndk.enabled under vendor directory",
-		fs: map[string][]byte{
-			"vendor/Android.bp": []byte(`
-				cc_library {
-					name: "libvndk",
-					vendor_available: true,
-					vndk: {
-						enabled: true,
-					},
-				}`),
-		},
-		expectedErrors: []string{
-			"VNDK can never contain a library that is device dependent",
-		},
-	},
-	{
 		name: "no vndk.enabled under device directory",
 		fs: map[string][]byte{
 			"device/Android.bp": []byte(`
