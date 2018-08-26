@@ -17,6 +17,7 @@ package build
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -27,7 +28,23 @@ func runNinja(ctx Context, config Config) {
 	ctx.BeginTrace("ninja")
 	defer ctx.EndTrace()
 
-	executable := config.PrebuiltBuildTool("ninja")
+	var (
+		cmdOut []byte
+		err    error
+	)
+	cmdName := "which"
+	cmdArgs := []string{"ninja"}
+	if cmdOut, err = exec.Command(cmdName, cmdArgs...).Output(); err != nil {
+		fmt.Fprintln(os.Stderr, "No Host ninja found. Using prebuilt.")
+	}
+
+	executable := string(cmdOut)
+	executable = strings.TrimSuffix(executable, "\n")
+
+	if len(executable) == 0 {
+		executable = config.PrebuiltBuildTool("ninja")
+	}
+
 	args := []string{
 		"-d", "keepdepfile",
 	}
