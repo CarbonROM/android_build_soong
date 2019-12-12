@@ -57,6 +57,14 @@ type variableProperties struct {
 			Cflags []string
 		}
 
+		Target_process_sdk_version_override struct {
+			Cppflags []string
+		}
+
+		Target_shim_libs struct {
+			Cppflags []string
+		}
+
 		Override_rs_driver struct {
 			Cflags []string
 		}
@@ -154,6 +162,8 @@ type productVariables struct {
 	Platform_preview_sdk_version              *string  `json:",omitempty"`
 	Platform_min_supported_target_sdk_version *string  `json:",omitempty"`
 	Platform_base_os                          *string  `json:",omitempty"`
+	Target_process_sdk_version_override	  *string  `json:",omitempty"`
+	Target_shim_libs			*string `json:",omitempty"`
 
 	DeviceName              *string  `json:",omitempty"`
 	DeviceArch              *string  `json:",omitempty"`
